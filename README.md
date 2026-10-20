@@ -86,7 +86,7 @@ Each release is built and tested by [GitHub Actions](.github/workflows/release.y
 
 ```bash
 shasum -a 256 -c certant-knowledgebase.zip.sha256
-gh attestation verify certant-knowledgebase.zip --repo certant-ai/certant-wordpress-kb-plugin
+gh attestation verify certant-knowledgebase.zip --owner certant-ai
 ```
 
 ## Development
