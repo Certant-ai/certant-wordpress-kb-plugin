@@ -3,7 +3,7 @@
 	"description": "Choose in WordPress which posts, pages and files Certant imports into your knowledgebase.",
 	"type": "wordpress-plugin",
 	"license": "GPL-2.0-or-later",
-	"homepage": "https://github.com/certant-ai/certant-knowledgebase-plugin",
+	"homepage": "https://github.com/certant-ai/certant-wordpress-kb-plugin",
 	"require": {
 		"php": ">=7.4"
 	},

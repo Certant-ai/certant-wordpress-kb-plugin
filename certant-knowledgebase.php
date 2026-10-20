@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name:       Certant Knowledgebase
- * Plugin URI:        https://github.com/certant-ai/certant-knowledgebase-plugin
+ * Plugin URI:        https://github.com/certant-ai/certant-wordpress-kb-plugin
  * Description:       Adds a Knowledgebase label to posts, pages and media, so you choose in WordPress what Certant imports into your knowledgebase.
  * Version:           1.0.0
  * Requires at least: 6.0
@@ -10,7 +10,7 @@
  * Author URI:        https://certant.ai
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
- * Update URI:        https://github.com/certant-ai/certant-knowledgebase-plugin
+ * Update URI:        https://github.com/certant-ai/certant-wordpress-kb-plugin
  * Text Domain:       certant-knowledgebase
  *
  * @package CertantKnowledgebase

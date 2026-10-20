@@ -3,10 +3,10 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/certant-ai/certant-knowledgebase-plugin/releases/latest"><img src="https://img.shields.io/github/v/release/certant-ai/certant-knowledgebase-plugin?label=release&color=1f5c45" alt="Latest release"></a>
+  <a href="https://github.com/certant-ai/certant-wordpress-kb-plugin/releases/latest"><img src="https://img.shields.io/github/v/release/certant-ai/certant-wordpress-kb-plugin?label=release&color=1f5c45" alt="Latest release"></a>
   <img src="https://img.shields.io/badge/WordPress-6.0%E2%80%937.1-21759B?logo=wordpress&logoColor=white" alt="WordPress 6.0 to 7.1">
   <img src="https://img.shields.io/badge/PHP-7.4%2B-777BB4?logo=php&logoColor=white" alt="PHP 7.4 or later">
-  <a href="https://github.com/certant-ai/certant-knowledgebase-plugin/actions/workflows/ci.yml"><img src="https://github.com/certant-ai/certant-knowledgebase-plugin/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <a href="https://github.com/certant-ai/certant-wordpress-kb-plugin/actions/workflows/ci.yml"><img src="https://github.com/certant-ai/certant-wordpress-kb-plugin/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
   <img src="https://img.shields.io/badge/code%20style-WPCS-21759B" alt="WordPress Coding Standards">
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-GPLv2%2B-blue" alt="License: GPL v2 or later"></a>
 </p>
@@ -23,7 +23,7 @@ The plugin adds a **Knowledgebase** box to the editor and the media library. Tic
 
 ## Install
 
-**1. Download** [`certant-knowledgebase.zip`](https://github.com/certant-ai/certant-knowledgebase-plugin/releases/latest/download/certant-knowledgebase.zip) from the [latest release](https://github.com/certant-ai/certant-knowledgebase-plugin/releases/latest).
+**1. Download** [`certant-knowledgebase.zip`](https://github.com/certant-ai/certant-wordpress-kb-plugin/releases/latest/download/certant-knowledgebase.zip) from the [latest release](https://github.com/certant-ai/certant-wordpress-kb-plugin/releases/latest).
 
 **2. Upload** it in WordPress: **Plugins → Add New Plugin → Upload Plugin**, choose the zip, then **Install Now**.
 
@@ -32,7 +32,7 @@ The plugin adds a **Knowledgebase** box to the editor and the media library. Tic
 Or with WP-CLI:
 
 ```bash
-wp plugin install https://github.com/certant-ai/certant-knowledgebase-plugin/releases/latest/download/certant-knowledgebase.zip --activate
+wp plugin install https://github.com/certant-ai/certant-wordpress-kb-plugin/releases/latest/download/certant-knowledgebase.zip --activate
 ```
 
 > Use the release zip, not GitHub's green **Code → Download ZIP** button. That one is the source repository, not the plugin WordPress expects.
@@ -86,7 +86,7 @@ Each release is built and tested by [GitHub Actions](.github/workflows/release.y
 
 ```bash
 shasum -a 256 -c certant-knowledgebase.zip.sha256
-gh attestation verify certant-knowledgebase.zip --repo certant-ai/certant-knowledgebase-plugin
+gh attestation verify certant-knowledgebase.zip --repo certant-ai/certant-wordpress-kb-plugin
 ```
 
 ## Development

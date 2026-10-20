@@ -22,11 +22,11 @@ Certant reads the labels through the WordPress REST API. In Certant, connect the
 
 == Installation ==
 
-1. Download `certant-knowledgebase.zip` from https://github.com/certant-ai/certant-knowledgebase-plugin/releases/latest
+1. Download `certant-knowledgebase.zip` from https://github.com/certant-ai/certant-wordpress-kb-plugin/releases/latest
 2. In WordPress, go to Plugins > Add New Plugin > Upload Plugin, choose the zip and click Install Now.
 3. Click Activate.
 
-With WP-CLI: `wp plugin install https://github.com/certant-ai/certant-knowledgebase-plugin/releases/latest/download/certant-knowledgebase.zip --activate`
+With WP-CLI: `wp plugin install https://github.com/certant-ai/certant-wordpress-kb-plugin/releases/latest/download/certant-knowledgebase.zip --activate`
 
 == Frequently Asked Questions ==
 
