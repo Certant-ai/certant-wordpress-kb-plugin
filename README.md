@@ -53,15 +53,29 @@ wp plugin install https://github.com/certant-ai/certant-wordpress-kb-plugin/rele
 
 > Picking collections in Certant needs the Certant WordPress connector update that is rolling out now. The plugin itself works on any site today, so you can file content ahead of it.
 
-In Certant, go to **Connections → WordPress** and enter your site's address. On **Sources**, tick Posts, Pages and **Files from the media library**, pick your collections under **Knowledgebase**, and choose how often to sync. Only content in those collections, or their sub-collections, is imported. Content you untick, unpublish or delete leaves the knowledgebase on the next sync.
+Collections are private, so Certant signs in to read them, with an application password for a user who can only file content.
+
+**1. In WordPress, add a user for Certant.** Go to **Users → Add New User** and give it the **Contributor** role. On that user's profile, under **Application Passwords**, add one named *Certant* and copy it. WordPress only offers application passwords on sites served over HTTPS.
+
+**2. In Certant, connect the site.** Go to **Connections → WordPress**, enter your site's address, choose **Sign in with an application password** and enter the username and the application password.
+
+**3. Choose what to import.** On **Sources**, tick Posts, Pages and **Files from the media library**, pick your collections under **Knowledgebase**, and choose how often to sync.
+
+<p align="center">
+  <img src=".github/assets/screenshot-certant-sources.png" alt="Certant's WordPress Sources form: Posts, Pages and Files ticked, the Knowledgebase collection picked with its sub-collections included, syncing every 6 hours" width="420">
+</p>
+
+Only content in those collections, or their sub-collections, is imported. Content you untick, unpublish or delete leaves the knowledgebase on the next sync.
 
 ## What the plugin does, and doesn't
 
-It is one PHP file, [`certant-knowledgebase.php`](certant-knowledgebase.php), about 120 lines and most of those are labels and comments. You can read all of it before you install it.
+It is one PHP file, [`certant-knowledgebase.php`](certant-knowledgebase.php), about 190 lines and most of those are labels and comments. You can read all of it before you install it.
 
-- **Does:** register one taxonomy, `certant_kb`, on posts, pages and media, and share it through the WordPress REST API, which is how Certant reads it.
+- **Does:** register one taxonomy, `certant_kb`, on posts, pages and media, readable through the WordPress REST API by signed-in users who can file content (Contributor and up). That is how the block editor shows it and how Certant reads it.
+- **Keeps collections private:** visitors who aren't signed in can't see collection names or which content is in them, and can't filter by them. The REST API answers 401 instead.
 - **Doesn't:** add anything to your public site (no archive pages, URLs or menus), store settings, make outbound requests, track anyone, or load scripts or styles.
-- **Visible over REST:** like categories and tags, the names of your collections and which *published* content is in them can be read at `/wp-json/wp/v2/certant_kb`. Private and draft content stays private. Don't put anything confidential in a collection name.
+
+To make collections readable by anyone, for example to connect Certant without a password, add `add_filter( 'certant_kb_rest_public', '__return_true' );` to your theme's `functions.php` or a small plugin.
 
 ## Custom post types
 

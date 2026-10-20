@@ -3,7 +3,7 @@
  * Plugin Name:       Certant Knowledgebase
  * Plugin URI:        https://github.com/certant-ai/certant-wordpress-kb-plugin
  * Description:       Adds a Knowledgebase label to posts, pages and media, so you choose in WordPress what Certant imports into your knowledgebase.
- * Version:           1.0.0
+ * Version:           1.1.0
  * Requires at least: 6.0
  * Requires PHP:      7.4
  * Author:            Certant
@@ -22,8 +22,12 @@
  * 1. Registers one taxonomy, "Knowledgebase" (certant_kb), on posts, pages and
  *    media. It is hierarchical, so it works like categories: collections
  *    with sub-collections, ticked in the editor.
- * 2. Shares it through the WordPress REST API, which is how the Certant
- *    connector reads which content to import.
+ * 2. Lets signed-in users who can file content (Contributor and up) read it
+ *    through the WordPress REST API. That is how the block editor shows it,
+ *    and how Certant reads it, signed in with an application password.
+ *    Visitors who are not signed in see no collections and cannot filter by
+ *    them. A site can make them public with the `certant_kb_rest_public`
+ *    filter.
  * 3. Creates a first "Knowledgebase" collection on activation.
  *
  * It keeps the taxonomy off the public site: no archive pages, no URLs, no
@@ -84,13 +88,78 @@ function certant_kb_register_taxonomy() {
 			'show_ui'           => true,
 			'show_admin_column' => true,
 			'query_var'         => CERTANT_KB_TAXONOMY,
-			// In the REST API, which is how Certant reads it.
+			// In the REST API (the editor and Certant use it); private, see below.
 			'show_in_rest'      => true,
 			'rest_base'         => CERTANT_KB_TAXONOMY,
 		)
 	);
 }
 add_action( 'init', 'certant_kb_register_taxonomy' );
+
+/**
+ * Whether the current request may see collections over the REST API.
+ *
+ * Yes for users who can file content in them (the taxonomy's assign_terms
+ * capability: Contributor and up). Return true from the
+ * `certant_kb_rest_public` filter to let anyone read them.
+ *
+ * @return bool
+ */
+function certant_kb_rest_allowed() {
+	if ( apply_filters( 'certant_kb_rest_public', false ) ) {
+		return true;
+	}
+	$taxonomy = get_taxonomy( CERTANT_KB_TAXONOMY );
+	return $taxonomy && current_user_can( $taxonomy->cap->assign_terms );
+}
+
+/**
+ * Refuses REST requests that would reveal collections to anyone else: the
+ * collections themselves, and filtering posts, pages or media by them.
+ *
+ * @param mixed           $result  Response to replace the request with, or null.
+ * @param WP_REST_Server  $server  Server instance.
+ * @param WP_REST_Request $request The request.
+ * @return mixed
+ */
+function certant_kb_guard_rest_request( $result, $server, $request ) {
+	$reveals = preg_match( '#^/wp/v2/' . CERTANT_KB_TAXONOMY . '(/|$)#', $request->get_route() )
+		|| null !== $request->get_param( CERTANT_KB_TAXONOMY )
+		|| null !== $request->get_param( CERTANT_KB_TAXONOMY . '_exclude' );
+	if ( null === $result && $reveals && ! certant_kb_rest_allowed() ) {
+		return new WP_Error(
+			'certant_kb_forbidden',
+			__( 'Knowledgebase collections are only available to signed-in users who can edit content.', 'certant-knowledgebase' ),
+			array( 'status' => rest_authorization_required_code() )
+		);
+	}
+	return $result;
+}
+add_filter( 'rest_pre_dispatch', 'certant_kb_guard_rest_request', 10, 3 );
+
+/**
+ * Leaves the collections out of post, page and media responses for anyone
+ * who may not see them.
+ *
+ * @param WP_REST_Response $response The response.
+ * @return WP_REST_Response
+ */
+function certant_kb_hide_rest_field( $response ) {
+	if ( isset( $response->data[ CERTANT_KB_TAXONOMY ] ) && ! certant_kb_rest_allowed() ) {
+		unset( $response->data[ CERTANT_KB_TAXONOMY ] );
+	}
+	return $response;
+}
+
+/**
+ * Hooks the field filter onto every content type the taxonomy is on.
+ */
+function certant_kb_hide_rest_fields() {
+	foreach ( certant_kb_post_types() as $post_type ) {
+		add_filter( "rest_prepare_{$post_type}", 'certant_kb_hide_rest_field' );
+	}
+}
+add_action( 'rest_api_init', 'certant_kb_hide_rest_fields' );
 
 /**
  * On activation, creates a first collection so there is something to tick.
