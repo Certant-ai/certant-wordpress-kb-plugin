@@ -1,0 +1,46 @@
+# Push a tag like v1.0.1 to publish a release. The tag must match the
+# "Version:" header and readme.txt's "Stable tag:". The zip is built from the
+# tagged commit, tested on WordPress, then attached to the release with its
+# SHA-256 and a signed build provenance attestation.
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+  id-token: write
+  attestations: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check the tag matches the plugin version
+        run: |
+          version="$(sed -n 's/^ \* Version: *//p' certant-knowledgebase.php)"
+          stable="$(sed -n 's/^Stable tag: *//p' readme.txt)"
+          echo "tag $GITHUB_REF_NAME, header $version, readme $stable"
+          [ "v$version" = "$GITHUB_REF_NAME" ] && [ "$stable" = "$version" ]
+
+      - name: Build and test on WordPress
+        run: tests/smoke.sh latest
+
+      - name: Checksum
+        run: cd dist && sha256sum certant-knowledgebase.zip > certant-knowledgebase.zip.sha256
+
+      - uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: dist/certant-knowledgebase.zip
+
+      - name: Publish the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" \
+            dist/certant-knowledgebase.zip dist/certant-knowledgebase.zip.sha256 \
+            --title "Certant Knowledgebase ${GITHUB_REF_NAME#v}" \
+            --generate-notes

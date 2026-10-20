@@ -1,0 +1,23 @@
+{
+	"name": "certant-ai/certant-knowledgebase",
+	"description": "Choose in WordPress which posts, pages and files Certant imports into your knowledgebase.",
+	"type": "wordpress-plugin",
+	"license": "GPL-2.0-or-later",
+	"homepage": "https://github.com/certant-ai/certant-knowledgebase-plugin",
+	"require": {
+		"php": ">=7.4"
+	},
+	"require-dev": {
+		"dealerdirect/phpcodesniffer-composer-installer": "^1.0",
+		"phpcompatibility/phpcompatibility-wp": "^2.1",
+		"wp-coding-standards/wpcs": "^3.1"
+	},
+	"config": {
+		"allow-plugins": {
+			"dealerdirect/phpcodesniffer-composer-installer": true
+		}
+	},
+	"scripts": {
+		"lint": "phpcs"
+	}
+}

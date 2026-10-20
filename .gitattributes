@@ -1,0 +1,8 @@
+# Keep GitHub's "Source code" downloads to the plugin itself.
+/.github export-ignore
+/bin export-ignore
+/tests export-ignore
+/.gitattributes export-ignore
+/.gitignore export-ignore
+/composer.json export-ignore
+/phpcs.xml.dist export-ignore
