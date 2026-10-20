@@ -51,6 +51,8 @@ wp plugin install https://github.com/certant-ai/certant-knowledgebase-plugin/rel
 
 ## Connect it to Certant
 
+> Picking collections in Certant needs the Certant WordPress connector update that is rolling out now. The plugin itself works on any site today, so you can file content ahead of it.
+
 In Certant, go to **Connections → WordPress** and enter your site's address. On **Sources**, tick Posts, Pages and **Files from the media library**, pick your collections under **Knowledgebase**, and choose how often to sync. Only content in those collections, or their sub-collections, is imported. Content you untick, unpublish or delete leaves the knowledgebase on the next sync.
 
 ## What the plugin does, and doesn't
